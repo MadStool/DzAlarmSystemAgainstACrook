@@ -150,7 +150,6 @@ Transform:
   m_Children:
   - {fileID: 1782425159}
   - {fileID: 685379199}
-  - {fileID: 1980087732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
@@ -420,8 +419,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 685379199}
-  - component: {fileID: 685379198}
   - component: {fileID: 685379197}
+  - component: {fileID: 685379200}
   m_Layer: 0
   m_Name: AlarmZone
   m_TagString: Untagged
@@ -441,9 +440,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ec862628385ab4880f5623f2e383a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _triggerRadius: 4
---- !u!65 &685379198
-BoxCollider:
+--- !u!4 &685379199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685379196}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.43, y: 0, z: 0.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 27363886}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &685379200
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -461,23 +474,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5, y: 5, z: 5}
-  m_Center: {x: 0.32, y: 0, z: 0}
---- !u!4 &685379199
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685379196}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 27363886}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Radius: 3
+  m_Center: {x: 0, y: -0.14, z: 0}
 --- !u!1 &1019214115
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,52 +931,7 @@ MonoBehaviour:
   _alarmSound: {fileID: 1782425157}
   _maxVolume: 1
   _volumeChangeSpeed: 1
---- !u!1 &1980087731
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1980087732}
-  - component: {fileID: 1980087733}
-  m_Layer: 0
-  m_Name: AlarmMediator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1980087732
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980087731}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 27363886}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1980087733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980087731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20c5e990f280acf44aeab490dc03c47c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _intruderDetector: {fileID: 685379197}
-  _alarmSystem: {fileID: 1782425160}
+  _alarmTrigger: {fileID: 685379197}
 --- !u!1 &1988095035
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,79 +7,59 @@ public class AlarmSystem : MonoBehaviour
     [SerializeField, Range(0.1f, 1f)] private float _maxVolume = 1f;
     [SerializeField, Range(0.1f, 2f)] private float _volumeChangeSpeed = 1f;
 
-    private Coroutine _volumeAdjustmentCoroutine;
+    [Header("References")]
+    [SerializeField] private AlarmTrigger _alarmTrigger;
+
+    private Coroutine _volumeCoroutine;
     private bool _isAlarmActive;
 
-    public void SubscribeToDetector(AlarmTrigger detector)
+    private void Start()
     {
-        detector.OnIntruderEntered.AddListener(Activate);
-        detector.OnIntruderExited.AddListener(Deactivate);
-    }
-
-    private void Activate()
-    {
-        if (_isAlarmActive) 
-            return;
-
-        _isAlarmActive = true;
-        SetTargetVolume(_maxVolume);
-    }
-
-    private void Deactivate()
-    {
-        if (_isAlarmActive == false) 
-            return;
-
-        _isAlarmActive = false;
-        SetTargetVolume(0f);
-    }
-
-    private void SetTargetVolume(float targetVolume)
-    {
-        if (_volumeAdjustmentCoroutine != null)
-            StopCoroutine(_volumeAdjustmentCoroutine);
-
-        _volumeAdjustmentCoroutine = StartCoroutine(AdjustVolumeToTarget(targetVolume));
-    }
-
-    private IEnumerator AdjustVolumeToTarget(float targetVolume)
-    {
-        if (ShouldStartPlaying(targetVolume))
-            _alarmSound.Play();
-
-        while (ReachedTargetVolume(targetVolume) == false)
+        if (_alarmTrigger != null)
         {
-            UpdateVolumeTowards(targetVolume);
+            Initialize(_alarmTrigger);
+        }
+    }
+
+    public void Initialize(AlarmTrigger detector)
+    {
+        detector.IntruderEntered += () => SetAlarmState(true);
+        detector.IntruderExited += () => SetAlarmState(false);
+    }
+
+    private void SetAlarmState(bool active)
+    {
+        _isAlarmActive = active;
+
+        if (_volumeCoroutine != null)
+        {
+            StopCoroutine(_volumeCoroutine);
+        }
+
+        _volumeCoroutine = StartCoroutine(AdjustVolumeCoroutine(
+            targetVolume: active ? _maxVolume : 0f));
+    }
+
+    private IEnumerator AdjustVolumeCoroutine(float targetVolume)
+    {
+        if (targetVolume > 0 && _alarmSound.isPlaying == false)
+        {
+            _alarmSound.Play();
+        }
+
+        while (Mathf.Approximately(_alarmSound.volume, targetVolume) == false)
+        {
+            _alarmSound.volume = Mathf.MoveTowards(
+                _alarmSound.volume,
+                targetVolume,
+                _volumeChangeSpeed * Time.deltaTime);
+
             yield return null;
         }
 
-        if (ShouldStopPlaying(targetVolume))
+        if (targetVolume <= 0 && _alarmSound.isPlaying)
+        {
             _alarmSound.Stop();
-
-        _volumeAdjustmentCoroutine = null;
-    }
-
-    private bool ShouldStartPlaying(float targetVolume)
-    {
-        return targetVolume > 0 && _alarmSound.isPlaying == false;
-    }
-
-    private bool ReachedTargetVolume(float targetVolume)
-    {
-        return Mathf.Approximately(_alarmSound.volume, targetVolume);
-    }
-
-    private bool ShouldStopPlaying(float targetVolume)
-    {
-        return Mathf.Approximately(targetVolume, 0f);
-    }
-
-    private void UpdateVolumeTowards(float targetVolume)
-    {
-        _alarmSound.volume = Mathf.MoveTowards(
-            _alarmSound.volume,
-            targetVolume,
-            _volumeChangeSpeed * Time.deltaTime
-        );
+        }
     }
 }

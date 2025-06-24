@@ -1,32 +1,25 @@
 using UnityEngine;
-using UnityEngine.Events;
+using System;
 
+public interface IIntruder{ }
+
+[RequireComponent(typeof(SphereCollider))]
 public class AlarmTrigger : MonoBehaviour
 {
-    [SerializeField, Min(0.1f)] private float _triggerRadius = 4f;
+    public event Action IntruderEntered;
+    public event Action IntruderExited;
 
-    public UnityEvent OnIntruderEntered { get; } = new UnityEvent();
-    public UnityEvent OnIntruderExited { get; } = new UnityEvent();
+    private void Awake() => GetComponent<SphereCollider>().isTrigger = true;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IIntruder>(out IIntruder intruder))
-        {
-            OnIntruderEntered.Invoke();
-        }
+            IntruderEntered?.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<IIntruder>(out IIntruder intruder))
-        {
-            OnIntruderExited.Invoke();
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        Gizmos.DrawSphere(transform.position, _triggerRadius);
+            IntruderExited?.Invoke();
     }
 }
