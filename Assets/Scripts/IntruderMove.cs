@@ -5,8 +5,8 @@ public interface IIntruder { }
 [RequireComponent(typeof(Rigidbody))]
 public class IntruderMove : MonoBehaviour, IIntruder
 {
-    private const string HORIZONTAL_AXIS = "Horizontal";
-    private const string VERTICAL_AXIS = "Vertical";
+    private const string HorizontalAxis = "Horizontal";
+    private const string VerticalAxis = "Vertical";
 
     [SerializeField, Range(1f, 10f)]
 
@@ -25,9 +25,9 @@ public class IntruderMove : MonoBehaviour, IIntruder
     private void Update()
     {
         var input = new Vector3(
-            Input.GetAxis(HORIZONTAL_AXIS),
+            Input.GetAxis(HorizontalAxis),
             0,
-            Input.GetAxis(VERTICAL_AXIS)
+            Input.GetAxis(VerticalAxis)
         );
 
         transform.Translate(input * (_moveSpeed * Time.deltaTime));

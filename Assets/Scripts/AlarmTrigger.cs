@@ -1,23 +1,26 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AlarmTrigger : MonoBehaviour
 {
     [SerializeField, Min(0.1f)] private float _triggerRadius = 4f;
-    [SerializeField] private AlarmSystem _alarmSystem;
+
+    public UnityEvent OnIntruderEntered { get; } = new UnityEvent();
+    public UnityEvent OnIntruderExited { get; } = new UnityEvent();
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Intruder>(out Intruder intruder))
+        if (other.TryGetComponent<IIntruder>(out IIntruder intruder))
         {
-            _alarmSystem?.ActivateAlarm();
+            OnIntruderEntered.Invoke();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<Intruder>(out Intruder intruder))
+        if (other.TryGetComponent<IIntruder>(out IIntruder intruder))
         {
-            _alarmSystem?.DeactivateAlarm();
+            OnIntruderExited.Invoke();
         }
     }
 
